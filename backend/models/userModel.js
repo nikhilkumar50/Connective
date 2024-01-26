@@ -21,8 +21,8 @@ const userSchema=mongoose.Schema({
         required:true,
     },
     profilePic:{
-        type:[String],
-        default:[],
+        type:String,
+        default:"",
     },
     followers:{
         type:[String],
