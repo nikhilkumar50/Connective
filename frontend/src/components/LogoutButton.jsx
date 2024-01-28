@@ -3,8 +3,10 @@ import { FiLogOut } from "react-icons/fi";
 import { useSetRecoilState } from "recoil";
 import useShowToast from "../hooks/useShowToast";
 import userAtom from "../atoms/userAtom";
+import { useNavigate } from "react-router-dom";
 
 const LogoutButton = () => {
+  const navigate=useNavigate();
   const setUser = useSetRecoilState(userAtom);
   const showToast = useShowToast();
 
@@ -24,6 +26,7 @@ const LogoutButton = () => {
       }
       localStorage.removeItem("user-connective");
       setUser(null);
+      navigate('/auth');
     } catch (error) {
       showToast("Error", data.error, "error");
     }

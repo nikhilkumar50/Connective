@@ -15,8 +15,10 @@ import { useRecoilState } from "recoil";
 import userAtom from "../atoms/userAtom";
 import usePreviewImg from "../hooks/usePreviewImg";
 import useShowToast from "../hooks/useShowToast";
+import { useNavigate } from "react-router-dom";
 
 export default function UpdateProfilePage() {
+	const navigate=useNavigate();
 	const [user, setUser] = useRecoilState(userAtom);
 	const [inputs, setInputs] = useState({
 		name: user.name,
@@ -35,8 +37,8 @@ export default function UpdateProfilePage() {
 
 	const handleSubmit = async (e) => {
 		e.preventDefault();
-		// if (updating) return;
-		// setUpdating(true);
+		if (updating) return;
+		setUpdating(true);
 		try {
 			const res = await fetch(`/api/users/update/${user._id}`, {
 				method: "PUT",
@@ -53,12 +55,14 @@ export default function UpdateProfilePage() {
 			showToast("Success", "Profile updated successfully", "success");
 			setUser(data);
 			localStorage.setItem("user-connective", JSON.stringify(data));
+			navigate("/");
+
 		} catch (error) {
 			showToast("Error", error, "error");
 		} 
-        // finally {
-		// 	setUpdating(false);
-		// }
+        finally {
+			setUpdating(false);
+		}
 	};
 	return (
 		<form 
@@ -164,7 +168,7 @@ export default function UpdateProfilePage() {
 								bg: "green.500",
 							}}
 							type='submit'
-							// isLoading={updating}
+							isLoading={updating}
 						>
 							Submit
 						</Button>
