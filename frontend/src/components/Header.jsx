@@ -55,13 +55,12 @@ const Header = () => {
       )}
 
       {!user && (
-        <Link
-          as={RouterLink}
+        <RouterLink
           to={"/auth"}
           onClick={() => setAuthScreen("signup")}
         >
           Sign up
-        </Link>
+        </RouterLink>
       )}
     </Flex>
   );

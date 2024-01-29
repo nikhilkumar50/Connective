@@ -19,10 +19,9 @@ import { useRecoilValue } from "recoil";
 import useShowToast from "../hooks/useShowToast";
 
 const UserHeader = ({ user }) => {
-  const toast = useToast();
   const currentUser = useRecoilValue(userAtom);
   const [following, setFollowing] = useState(
-    user.followers.includes(currentUser._id)
+    user.followers && currentUser ? user.followers.includes(currentUser._id) : false
   );
   const showToast = useShowToast();
   const [updating, setUpdating] = useState(false);
@@ -30,7 +29,7 @@ const UserHeader = ({ user }) => {
   const copyURL = () => {
     const currentURL = window.location.href;
     navigator.clipboard.writeText(currentURL).then(() => {
-      console.log(currentURL);
+      showToast("Success","Profile Link Copied","Success");
     });
   };
 
@@ -43,7 +42,7 @@ const UserHeader = ({ user }) => {
     setUpdating(true);
 
     try {
-      const res = await fetch(`/api/users/follow/${user._id}`, {
+      const res = await fetch(`/api/users/follow/${user?._id}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

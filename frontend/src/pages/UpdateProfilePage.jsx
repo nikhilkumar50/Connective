@@ -27,6 +27,8 @@ export default function UpdateProfilePage() {
 		bio: user.bio,
 		password: "",
 	});
+
+	console.log(user);
     
 	const fileRef = useRef(null);
 	const [updating, setUpdating] = useState(false);
@@ -40,7 +42,7 @@ export default function UpdateProfilePage() {
 		if (updating) return;
 		setUpdating(true);
 		try {
-			const res = await fetch(`/api/users/update/${user._id}`, {
+			const res = await fetch(`/api/users/update/${user?._id}`, {
 				method: "PUT",
 				headers: {
 					"Content-Type": "application/json",
@@ -55,7 +57,7 @@ export default function UpdateProfilePage() {
 			showToast("Success", "Profile updated successfully", "success");
 			setUser(data);
 			localStorage.setItem("user-connective", JSON.stringify(data));
-			navigate("/");
+			
 
 		} catch (error) {
 			showToast("Error", error, "error");
