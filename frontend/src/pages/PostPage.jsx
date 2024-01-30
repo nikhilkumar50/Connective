@@ -64,7 +64,7 @@ const PostPage = () => {
       </Box>
 
       <Flex gap={3} my={3}>
-        <Actions liked={liked} setLiked={setLiked} />
+        <Actions  />
       </Flex>
 
       <Flex gap={3} alignItems={"center"}>

@@ -38,7 +38,7 @@ const Comment = () => {
           </Flex>
 
           <Text>Great Platform to commuicate</Text>
-          <Actions liked={liked} setLiked={setLiked} />
+          <Actions  />
           <Text fontSize={"sm"} color={"gray.light"}>
             {100 + (liked ? 1 : 0)} likes
           </Text>

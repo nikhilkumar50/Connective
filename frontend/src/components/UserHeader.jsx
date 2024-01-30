@@ -21,7 +21,7 @@ import useShowToast from "../hooks/useShowToast";
 const UserHeader = ({ user }) => {
   const currentUser = useRecoilValue(userAtom);
   const [following, setFollowing] = useState(
-    user.followers && currentUser ? user.followers.includes(currentUser._id) : false
+    user.followers && currentUser ? user.followers.includes(currentUser?._id) : false
   );
   const showToast = useShowToast();
   const [updating, setUpdating] = useState(false);
@@ -114,7 +114,7 @@ const UserHeader = ({ user }) => {
         </Box>
       </Flex>
 
-      <Text>{user.bio}</Text>
+      <Text>{user?.bio}</Text>
 
       {currentUser?._id === user._id && (
         <Link as={RouterLink} to="/update">
