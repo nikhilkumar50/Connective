@@ -82,27 +82,6 @@ const deletePost = async (req, res) => {
   }
 };
 
-const deleteComment = async (req, res) => {
-  const { id } = req.params;
-  try {
-    let post;
-    if (mongoose.Types.ObjectId.isValid(id)) {
-      post = await Post.findOneAndUpdate(
-        { "replies._id": id },
-        { $pull: { replies: { _id: id } } },
-        { new: true }
-      );
-    }
-    if (!post) {
-      return res.status(404).json({ error: "Comment not found" });
-    }
-
-    res.status(200).json({ message: "Comment deleted successfully" });
-  } catch (error) {
-    console.error(error);
-    return res.status(500).json({ error: "Internal Server Error" });
-  }
-};
 
 const likeUnlikePost = async (req, res) => {
   try {

@@ -20,6 +20,7 @@ const UserPage = () => {
     
 
     const getPosts = async () => {
+      setPosts([]);
       if(!user)return ;
       setFetchingPosts(true);
       try {
