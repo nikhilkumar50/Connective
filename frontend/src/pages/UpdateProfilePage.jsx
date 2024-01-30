@@ -28,7 +28,6 @@ export default function UpdateProfilePage() {
 		password: "",
 	});
 
-	console.log(user);
     
 	const fileRef = useRef(null);
 	const [updating, setUpdating] = useState(false);

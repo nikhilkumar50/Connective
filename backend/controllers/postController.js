@@ -178,7 +178,6 @@ export {
   createPost,
   getPost,
   deletePost,
-  deleteComment,
   likeUnlikePost,
   replyToPost,
   getFeedPosts,
