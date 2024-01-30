@@ -42,6 +42,7 @@ const PostPage = () => {
           showToast("Error", data.error, "error");
           return;
         }
+
         setPosts([data]);
       } catch (error) {
         showToast("Error", error.message, "error");
@@ -105,7 +106,6 @@ const PostPage = () => {
               onClick={handleDeletePost}
             />
           )}
-          
         </Flex>
       </Flex>
 
@@ -140,10 +140,7 @@ const PostPage = () => {
         <Comment
           key={reply._id}
           reply={reply}
-          lastReply={
-            reply._id ===
-            currentPost.replies[currentPost.replies.length - 1]._id
-          }
+          lastReply={reply._id === currentPost.replies[currentPost.replies.length - 1]._id}
         />
       ))}
     </>

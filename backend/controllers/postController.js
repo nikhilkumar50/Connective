@@ -1,6 +1,7 @@
 import User from "../models/userModel.js";
 import Post from "../models/postModel.js";
 import { v2 as cloudinary } from "cloudinary";
+import mongoose from "mongoose";
 
 const createPost = async (req, res) => {
   try {
@@ -68,8 +69,8 @@ const deletePost = async (req, res) => {
       return res.status(401).json({ error: "Unauthorized to delete post" });
     }
 
-    if(post.img){
-      const imgId=post.img.split("/").pop().split(".")[0];
+    if (post.img) {
+      const imgId = post.img.split("/").pop().split(".")[0];
       await cloudinary.uploader.destroy(imgId);
     }
 
@@ -78,6 +79,28 @@ const deletePost = async (req, res) => {
     res.status(200).json({ message: "Post deleted successfully" });
   } catch (error) {
     res.status(500).json({ error: error.message });
+  }
+};
+
+const deleteComment = async (req, res) => {
+  const { id } = req.params;
+  try {
+    let post;
+    if (mongoose.Types.ObjectId.isValid(id)) {
+      post = await Post.findOneAndUpdate(
+        { "replies._id": id },
+        { $pull: { replies: { _id: id } } },
+        { new: true }
+      );
+    }
+    if (!post) {
+      return res.status(404).json({ error: "Comment not found" });
+    }
+
+    res.status(200).json({ message: "Comment deleted successfully" });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: "Internal Server Error" });
   }
 };
 
@@ -176,8 +199,9 @@ export {
   createPost,
   getPost,
   deletePost,
+  deleteComment,
   likeUnlikePost,
   replyToPost,
   getFeedPosts,
-  getUserPosts
+  getUserPosts,
 };

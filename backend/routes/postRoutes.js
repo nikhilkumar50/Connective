@@ -1,5 +1,5 @@
 import express from "express";
-import { createPost, deletePost, getPost, likeUnlikePost, replyToPost,getFeedPosts, getUserPosts } from "../controllers/postController.js";
+import { createPost, deletePost, getPost, likeUnlikePost, replyToPost,getFeedPosts, getUserPosts, deleteComment } from "../controllers/postController.js";
 import protectRoute from "../middlewares/protectRoute.js";
 
 const router=express.Router();
@@ -8,6 +8,7 @@ router.get("/feed",protectRoute,getFeedPosts);
 router.get("/:id",getPost);
 router.get("/user/:username",getUserPosts);
 router.delete("/:id",protectRoute,deletePost);
+router.delete("/reply/:id",protectRoute,deleteComment);
 router.post("/create",protectRoute,createPost);
 router.put("/like/:id",protectRoute,likeUnlikePost);
 router.put("/reply/:id", protectRoute, replyToPost);
