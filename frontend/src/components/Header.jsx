@@ -8,6 +8,8 @@ import { Link as RouterLink } from "react-router-dom";
 import { FiLogOut } from "react-icons/fi";
 import authScreenAtom from "../atoms/authAtom";
 import useLogout from "../hooks/useLogout";
+import { BsFillChatQuoteFill } from "react-icons/bs";
+
 
 const Header = () => {
   const { colorMode, toggleColorMode } = useColorMode();
@@ -41,9 +43,10 @@ const Header = () => {
             <RxAvatar size={24} />
           </RouterLink>
 
-          {/* <RouterLink to={`/chat`}>
+          <RouterLink to={`/chat`}>
             <BsFillChatQuoteFill size={20} />
-          </RouterLink> */}
+          </RouterLink>
+          
           {/* <RouterLink to={`/settings`}>
             <MdOutlineSettings size={20} />
           </RouterLink> */}
