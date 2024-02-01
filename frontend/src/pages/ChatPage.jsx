@@ -54,26 +54,26 @@ const ChatPage = () => {
   //   });
   // }, [socket, setConversations]);
 
-  // useEffect(() => {
-  //   const getConversations = async () => {
-  //     try {
-  //       const res = await fetch("/api/messages/conversations");
-  //       const data = await res.json();
-  //       if (data.error) {
-  //         showToast("Error", data.error, "error");
-  //         return;
-  //       }
-  //       console.log(data);
-  //       setConversations(data);
-  //     } catch (error) {
-  //       showToast("Error", error.message, "error");
-  //     } finally {
-  //       setLoadingConversations(false);
-  //     }
-  //   };
+  useEffect(() => {
+    const getConversations = async () => {
+      try {
+        const res = await fetch("/api/messages/conversations");
+        const data = await res.json();
+        if (data.error) {
+          showToast("Error", data.error, "error");
+          return;
+        }
+        console.log(data);
+        setConversations(data);
+      } catch (error) {
+        showToast("Error", error.message, "error");
+      } finally {
+        setLoadingConversations(false);
+      }
+    };
 
-  //   getConversations();
-  // }, [showToast, setConversations]);
+    getConversations();
+  }, [showToast, setConversations]);
 
   // const handleConversationSearch = async (e) => {
   //   e.preventDefault();
