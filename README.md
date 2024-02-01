@@ -1,6 +1,5 @@
 # Connective -One stop Social Media Platform
 ### Built With React, MongoDB, ExpressJS, NodeJS, JWT, Cloudinary
-Certainly! Here's an improved version to include in your resume:
 
 ### Features
 
