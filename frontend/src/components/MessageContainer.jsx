@@ -7,7 +7,7 @@ import { conversationsAtom, selectedConversationAtom } from "../atoms/messagesAt
 import { useRecoilValue, useSetRecoilState } from "recoil";
 import userAtom from "../atoms/userAtom";
 import { useSocket } from "../context/SocketContext.jsx";
-import messageSound from "../assets/sounds/message.mp3";
+// import messageSound from "../assets/sounds/message.mp3";
 const MessageContainer = () => {
 	const showToast = useShowToast();
 	const selectedConversation = useRecoilValue(selectedConversationAtom);
@@ -18,37 +18,37 @@ const MessageContainer = () => {
 	const setConversations = useSetRecoilState(conversationsAtom);
 	const messageEndRef = useRef(null);
 
-	// useEffect(() => {
-	// 	socket.on("newMessage", (message) => {
-	// 		if (selectedConversation._id === message.conversationId) {
-	// 			setMessages((prev) => [...prev, message]);
-	// 		}
+	useEffect(() => {
+		socket.on("newMessage", (message) => {
+			if (selectedConversation._id === message.conversationId) {
+				setMessages((prev) => [...prev, message]);
+			}
 
-	// 		// make a sound if the window is not focused
-	// 		if (!document.hasFocus()) {
-	// 			const sound = new Audio(messageSound);
-	// 			sound.play();
-	// 		}
+			// make a sound if the window is not focused
+			// if (!document.hasFocus()) {
+			// 	const sound = new Audio(messageSound);
+			// 	sound.play();
+			// }
 
-	// 		setConversations((prev) => {
-	// 			const updatedConversations = prev.map((conversation) => {
-	// 				if (conversation._id === message.conversationId) {
-	// 					return {
-	// 						...conversation,
-	// 						lastMessage: {
-	// 							text: message.text,
-	// 							sender: message.sender,
-	// 						},
-	// 					};
-	// 				}
-	// 				return conversation;
-	// 			});
-	// 			return updatedConversations;
-	// 		});
-	// 	});
+			setConversations((prev) => {
+				const updatedConversations = prev.map((conversation) => {
+					if (conversation._id === message.conversationId) {
+						return {
+							...conversation,
+							lastMessage: {
+								text: message.text,
+								sender: message.sender,
+							},
+						};
+					}
+					return conversation;
+				});
+				return updatedConversations;
+			});
+		});
 
-	// 	return () => socket.off("newMessage");
-	// }, [socket, selectedConversation, setConversations]);
+		return () => socket.off("newMessage");
+	}, [socket, selectedConversation, setConversations]);
 
 	// useEffect(() => {
 	// 	const lastMessageIsFromOtherUser = messages.length && messages[messages.length - 1].sender !== currentUser._id;
@@ -81,28 +81,28 @@ const MessageContainer = () => {
 	// 	messageEndRef.current?.scrollIntoView({ behavior: "smooth" });
 	// }, [messages]);
 
-	// useEffect(() => {
-	// 	const getMessages = async () => {
-	// 		setLoadingMessages(true);
-	// 		setMessages([]);
-	// 		try {
-	// 			if (selectedConversation.mock) return;
-	// 			const res = await fetch(`/api/messages/${selectedConversation.userId}`);
-	// 			const data = await res.json();
-	// 			if (data.error) {
-	// 				showToast("Error", data.error, "error");
-	// 				return;
-	// 			}
-	// 			setMessages(data);
-	// 		} catch (error) {
-	// 			showToast("Error", error.message, "error");
-	// 		} finally {
-	// 			setLoadingMessages(false);
-	// 		}
-	// 	};
+	useEffect(() => {
+		const getMessages = async () => {
+			setLoadingMessages(true);
+			setMessages([]);
+			try {
+				if (selectedConversation.mock) return;
+				const res = await fetch(`/api/messages/${selectedConversation.userId}`);
+				const data = await res.json();
+				if (data.error) {
+					showToast("Error", data.error, "error");
+					return;
+				}
+				setMessages(data);
+			} catch (error) {
+				showToast("Error", error.message, "error");
+			} finally {
+				setLoadingMessages(false);
+			}
+		};
 
-	// 	getMessages();
-	// }, [showToast, selectedConversation.userId, selectedConversation.mock]);
+		getMessages();
+	}, [showToast, selectedConversation.userId, selectedConversation.mock]);
 
 	return (
 		<Flex

@@ -63,7 +63,6 @@ const ChatPage = () => {
           showToast("Error", data.error, "error");
           return;
         }
-        console.log(data);
         setConversations(data);
       } catch (error) {
         showToast("Error", error.message, "error");
@@ -75,59 +74,59 @@ const ChatPage = () => {
     getConversations();
   }, [showToast, setConversations]);
 
-  // const handleConversationSearch = async (e) => {
-  //   e.preventDefault();
-  //   setSearchingUser(true);
-  //   try {
-  //     const res = await fetch(`/api/users/profile/${searchText}`);
-  //     const searchedUser = await res.json();
-  //     if (searchedUser.error) {
-  //       showToast("Error", searchedUser.error, "error");
-  //       return;
-  //     }
+  const handleConversationSearch = async (e) => {
+    e.preventDefault();
+    setSearchingUser(true);
+    try {
+      const res = await fetch(`/api/users/profile/${searchText}`);
+      const searchedUser = await res.json();
+      if (searchedUser.error) {
+        showToast("Error", searchedUser.error, "error");
+        return;
+      }
 
-  //     const messagingYourself = searchedUser._id === currentUser._id;
-  //     if (messagingYourself) {
-  //       showToast("Error", "You cannot message yourself", "error");
-  //       return;
-  //     }
+      const messagingYourself = searchedUser._id === currentUser._id;
+      if (messagingYourself) {
+        showToast("Error", "You cannot message yourself", "error");
+        return;
+      }
 
-  //     const conversationAlreadyExists = conversations.find(
-  //       (conversation) => conversation.participants[0]._id === searchedUser._id
-  //     );
+      const conversationAlreadyExists = conversations.find(
+        (conversation) => conversation.participants[0]._id === searchedUser._id
+      );
 
-  //     if (conversationAlreadyExists) {
-  //       setSelectedConversation({
-  //         _id: conversationAlreadyExists._id,
-  //         userId: searchedUser._id,
-  //         username: searchedUser.username,
-  //         userProfilePic: searchedUser.profilePic,
-  //       });
-  //       return;
-  //     }
+      if (conversationAlreadyExists) {
+        setSelectedConversation({
+          _id: conversationAlreadyExists._id,
+          userId: searchedUser._id,
+          username: searchedUser.username,
+          userProfilePic: searchedUser.profilePic,
+        });
+        return;
+      }
 
-  //     const mockConversation = {
-  //       mock: true,
-  //       lastMessage: {
-  //         text: "",
-  //         sender: "",
-  //       },
-  //       _id: Date.now(),
-  //       participants: [
-  //         {
-  //           _id: searchedUser._id,
-  //           username: searchedUser.username,
-  //           profilePic: searchedUser.profilePic,
-  //         },
-  //       ],
-  //     };
-  //     setConversations((prevConvs) => [...prevConvs, mockConversation]);
-  //   } catch (error) {
-  //     showToast("Error", error.message, "error");
-  //   } finally {
-  //     setSearchingUser(false);
-  //   }
-  // };
+      const mockConversation = {
+        mock: true,
+        lastMessage: {
+          text: "",
+          sender: "",
+        },
+        _id: Date.now(),
+        participants: [
+          {
+            _id: searchedUser._id,
+            username: searchedUser.username,
+            profilePic: searchedUser.profilePic,
+          },
+        ],
+      };
+      setConversations((prevConvs) => [...prevConvs, mockConversation]);
+    } catch (error) {
+      showToast("Error", error.message, "error");
+    } finally {
+      setSearchingUser(false);
+    }
+  };
 
   return (
     <Box

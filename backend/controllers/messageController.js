@@ -46,10 +46,10 @@ const sendMessage=async(req, res)=>{
 			}),
 		]);
 
-		// const recipientSocketId = getRecipientSocketId(recipientId);
-		// if (recipientSocketId) {
-		// 	io.to(recipientSocketId).emit("newMessage", newMessage);
-		// }
+		const recipientSocketId = getRecipientSocketId(recipientId);
+		if (recipientSocketId) {
+			io.to(recipientSocketId).emit("newMessage", newMessage);
+		}
 
 		res.status(201).json(newMessage);
 	} catch (error) {
