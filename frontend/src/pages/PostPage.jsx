@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import UserPost from "../components/UserPost";
 import {
   Avatar,
   Box,
@@ -7,7 +6,7 @@ import {
   Divider,
   Flex,
   Image,
-  Portal,
+  
   Spinner,
   Text,
 } from "@chakra-ui/react";

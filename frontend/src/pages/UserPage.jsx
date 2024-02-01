@@ -17,8 +17,6 @@ const UserPage = () => {
   const [fetchingPosts, setFetchingPosts] = useState(true);
 
   useEffect(() => {
-    
-
     const getPosts = async () => {
       setPosts([]);
       if(!user)return ;

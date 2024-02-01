@@ -8,7 +8,6 @@ import { CgMoreO } from "react-icons/cg";
 import { useRecoilValue } from "recoil";
 import userAtom from "../atoms/userAtom";
 import { Link as RouterLink } from "react-router-dom";
-import useShowToast from "../hooks/useShowToast";
 import useFollowUnfollow from "../hooks/useFollowUnfollow";
 
 const UserHeader = ({ user }) => {
@@ -42,7 +41,7 @@ const UserHeader = ({ user }) => {
 					<Flex gap={2} alignItems={"center"}>
 						<Text fontSize={"sm"}>{user.username}</Text>
 						<Text fontSize={"xs"} bg={"gray.dark"} color={"gray.light"} p={1} borderRadius={"full"}>
-							threads.net
+							connective.net
 						</Text>
 					</Flex>
 				</Box>
