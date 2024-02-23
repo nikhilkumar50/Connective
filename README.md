@@ -56,3 +56,8 @@ cd connective
  
 4. **JWT_SECRET_KEY**:
     - This just needs to be any long, random string. You can google "secret key generator".
+
+**Frontend**:
+   - Open a new terminal and navigate to the `frontend` directory.
+   - Install dependencies: `npm install`.
+   - Start the frontend application: `npm run dev`.
