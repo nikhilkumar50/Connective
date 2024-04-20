@@ -82,7 +82,6 @@ const deletePost = async (req, res) => {
   }
 };
 
-
 const likeUnlikePost = async (req, res) => {
   try {
     const { id: postId } = req.params;

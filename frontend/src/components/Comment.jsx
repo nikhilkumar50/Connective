@@ -8,8 +8,7 @@ import useShowToast from "../hooks/useShowToast";
 const Comment = ({ reply, lastreply }) => {
   const currentUser = useRecoilValue(userAtom);
   const [posts, setPosts] = useRecoilState(postsAtom);
-  const showToast=useShowToast();
-  
+  const showToast = useShowToast();
 
   return (
     <>

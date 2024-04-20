@@ -1,10 +1,10 @@
 import User from "../models/userModel.js";
 import bcrypt from "bcryptjs";
 import generateTokenAndSetCookie from "../utils/helpers/generateTokenAndSetCookie.js";
-import {v2 as cloudinary} from 'cloudinary';
+import { v2 as cloudinary } from "cloudinary";
 import mongoose from "mongoose";
 import Post from "../models/postModel.js";
- 
+
 const signupUser = async (req, res) => {
   try {
     const { name, email, username, password } = req.body;
@@ -31,15 +31,14 @@ const signupUser = async (req, res) => {
         name: newUser.name,
         email: newUser.email,
         username: newUser.username,
-        bio:newUser.bio,
-        profilePic:newUser.profilePic,
+        bio: newUser.bio,
+        profilePic: newUser.profilePic,
       });
     } else {
       res.status(400).json({ error: "Invalid user data" });
     }
   } catch (error) {
     res.status(500).json({ error: error.message });
-    
   }
 };
 
@@ -58,10 +57,10 @@ const loginUser = async (req, res) => {
         error: "Invalid username or Password",
       });
 
-      if (user.isFrozen) {
-        user.isFrozen = false;
-        await user.save();
-      }
+    if (user.isFrozen) {
+      user.isFrozen = false;
+      await user.save();
+    }
 
     generateTokenAndSetCookie(user._id, res);
 
@@ -70,12 +69,11 @@ const loginUser = async (req, res) => {
       name: user.name,
       email: user.email,
       username: user.username,
-      bio:user.bio,
-      profilePic:user.profilePic,
+      bio: user.bio,
+      profilePic: user.profilePic,
     });
   } catch (error) {
     res.status(500).json({ error: error.message });
-    
   }
 };
 
@@ -85,7 +83,6 @@ const logoutUser = (req, res) => {
     res.status(200).json({ message: "User logged out successfully" });
   } catch (error) {
     res.status(500).json({ error: error.message });
-    
   }
 };
 
@@ -126,7 +123,6 @@ const followUnFollowUser = async (req, res) => {
     }
   } catch (error) {
     res.status(500).json({ error: error.message });
-    
   }
 };
 
@@ -151,13 +147,14 @@ const updateUser = async (req, res) => {
       user.password = hashedPassword;
     }
 
-    if(profilePic){
-      if(user.profilePic){
-        await cloudinary.uploader.destroy(user.profilePic.split("/").pop().split(".")[0]);
+    if (profilePic) {
+      if (user.profilePic) {
+        await cloudinary.uploader.destroy(
+          user.profilePic.split("/").pop().split(".")[0]
+        );
       }
-      const uploadedResponse=await cloudinary.uploader.upload(profilePic);
-      profilePic=uploadedResponse.secure_url;
-
+      const uploadedResponse = await cloudinary.uploader.upload(profilePic);
+      profilePic = uploadedResponse.secure_url;
     }
 
     user.name = name || user.name;
@@ -170,93 +167,94 @@ const updateUser = async (req, res) => {
 
     await Post.updateMany(
       {
-        "replies.userId":userId
+        "replies.userId": userId,
       },
       {
-        $set:{
-          "replies.$[reply].username":user.username,
-          "replies.$[reply].userProfilePic":user.profilePic
-        }
+        $set: {
+          "replies.$[reply].username": user.username,
+          "replies.$[reply].userProfilePic": user.profilePic,
+        },
       },
       {
-        arrayFilters:[{"reply.userId":userId}]
+        arrayFilters: [{ "reply.userId": userId }],
       }
-    )
+    );
 
+    user.password = null;
 
-    user.password=null;
-
-    return res
-      .status(200)
-      .json(user);
+    return res.status(200).json(user);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
 };
 
 const getUserProfile = async (req, res) => {
-  const {query}=req.params;
+  const { query } = req.params;
   try {
     let user;
 
-		// query is userId
-		if (mongoose.Types.ObjectId.isValid(query)) {
-			user = await User.findOne({ _id: query }).select("-password").select("-updatedAt");
-		} else {
-			// query is username
-			user = await User.findOne({ username: query }).select("-password").select("-updatedAt");
-		}
-    if(!user)return res.status(400).json({error:"User not found"});
+    // query is userId
+    if (mongoose.Types.ObjectId.isValid(query)) {
+      user = await User.findOne({ _id: query })
+        .select("-password")
+        .select("-updatedAt");
+    } else {
+      // query is username
+      user = await User.findOne({ username: query })
+        .select("-password")
+        .select("-updatedAt");
+    }
+    if (!user) return res.status(400).json({ error: "User not found" });
 
     res.status(200).json(user);
-
   } catch (error) {
     res.status(500).json({ error: error.message });
-    
   }
 };
 const getSuggestedUsers = async (req, res) => {
-	try {
-		// exclude the current user from suggested users array and exclude users that current user is already following
-		const userId = req.user._id;
+  try {
+    // exclude the current user from suggested users array and exclude users that current user is already following
+    const userId = req.user._id;
 
-		const usersFollowedByYou = await User.findById(userId).select("following");
+    const usersFollowedByYou = await User.findById(userId).select("following");
 
-		const users = await User.aggregate([
-			{
-				$match: {
-					_id: { $ne: userId },
-				},
-			},
-			{
-				$sample: { size: 10 },
-			},
-		]);
-		const filteredUsers = users.filter((user) => !usersFollowedByYou.following.includes(user._id));
-		const suggestedUsers = filteredUsers.slice(0, 4);
+    const users = await User.aggregate([
+      {
+        $match: {
+          _id: { $ne: userId },
+        },
+      },
+      {
+        $sample: { size: 10 },
+      },
+    ]);
+    const filteredUsers = users.filter(
+      (user) => !usersFollowedByYou.following.includes(user._id)
+    );
+    const suggestedUsers = filteredUsers.slice(0, 4);
 
-		suggestedUsers.forEach((user) => (user.password = null));
+    suggestedUsers.forEach((user) => (user.password = null));
 
-		res.status(200).json(suggestedUsers);
-	} catch (error) {
-		res.status(500).json({ error: error.message });
-	}
+    res.status(200).json(suggestedUsers);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
 };
 
 const freezeAccount = async (req, res) => {
-	try {
-		const user = await User.findById(req.user._id);
-		if (!user) {
-			return res.status(400).json({ error: "User not found" });
-		}
+  try {
+    const user = await User.findById(req.user._id);
+    if (!user) {
+      return res.status(400).json({ error: "User not found" });
+    }
 
-		user.isFrozen = true;
-		await user.save();
+    user.isFrozen = true;
+    await user.save();
 
-		res.status(200).json({ success: true });
-	} catch (error) {
-		res.status(500).json({ error: error.message });
-	}
+    res.status(200).json({ success: true });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
 };
 
 export {
@@ -267,5 +265,5 @@ export {
   updateUser,
   getUserProfile,
   getSuggestedUsers,
-  freezeAccount
+  freezeAccount,
 };
