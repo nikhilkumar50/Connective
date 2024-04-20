@@ -1,4 +1,4 @@
-import { Flex, Image, useColorMode,Button } from "@chakra-ui/react";
+import { Flex, Image, useColorMode,Button,Link } from "@chakra-ui/react";
 import React from "react";
 import { useRecoilValue, useSetRecoilState } from "recoil";
 import userAtom from "../atoms/userAtom";
@@ -9,6 +9,7 @@ import { FiLogOut } from "react-icons/fi";
 import authScreenAtom from "../atoms/authAtom";
 import useLogout from "../hooks/useLogout";
 import { BsFillChatQuoteFill } from "react-icons/bs";
+import { MdOutlineSettings } from "react-icons/md";
 
 
 const Header = () => {
@@ -47,9 +48,9 @@ const Header = () => {
             <BsFillChatQuoteFill size={20} />
           </RouterLink>
           
-          {/* <RouterLink to={`/settings`}>
-            <MdOutlineSettings size={20} />
-          </RouterLink> */}
+          <Link as={RouterLink} to={`/settings`}>
+						<MdOutlineSettings size={20} />
+					</Link>
           <Button size={"xs"} onClick={logout}>
             <FiLogOut size={20} />
           </Button>
